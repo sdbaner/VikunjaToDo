@@ -18,7 +18,8 @@ I am using AWS and deploying the application on EKS. I have using VPC with subne
 - [Database Deployment](README-DatabaseDeployment.md)
 - [CI CD](README-CiCd.md)
 - [Keycloak](README-Keycloak.md)
-- [Observabilty](README-Observabilty.md) 
+- [Observabilty](README-Observabilty.md)
+- [Secrets Mannagement](README-Secrets.md) 
 
 
 ## TODO
