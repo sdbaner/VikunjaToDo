@@ -24,3 +24,16 @@ I am using AWS and deploying the application on EKS. I have using VPC with subne
 ## TODO
 
 1. Create infrastructure using terraform.
+
+Adding GitHub Actions steps to build and push Docker images to DockerHub
+Creating a Helm chart for the Kubernetes deployment
+Exploring the Helm chart structure and values.yaml configuration
+Automating docker image tag update to be picked up by ArgoCD
+Setting up ArgoCD for GitOps: Deploying ArgoCD with Helm using Terraform
+Accessing ArgoCD dashboard and logging in with default credentials
+Writing the ArgoCD application YAML (argocd-app.yaml) to link the Helm chart
+Configuring ArgoCD to monitor GitHub repository using a Personal Access Token (PAT)
+Deploying the ArgoCD application and enabling auto-sync
+Testing the pipeline with a Python app update
+Accessing the updated Python app using port forwarding
+Best practices for CI/CD and GitOps pipelines in production environments
