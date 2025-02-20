@@ -1,0 +1,64 @@
+name: Deploy Database changes and App Changes to Kubernetes using Helm
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Set up Kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'v1.29.0' 
+
+    - name: Install Helm
+      uses: azure/setup-helm@v1
+
+    - name: Create kubeconfig file
+      run: echo "${{ secrets.KUBECONFIG }}" > ${{ github.workspace }}/kubeconfig
+
+    
+    - name: Deploy PostgreSQL & Migrations
+      run: |
+        helm upgrade --install postgres ./postgresql-chart --namespace vikunja
+
+    - name: Verify Deployment
+      run: kubectl get pods -n vikunja
+
+    - name: Deploy to Kubernetes using Helm
+      env:
+        KUBECONFIG: ${{ github.workspace }}/kubeconfig
+      run: |
+       cd my-app       helm upgrade --install my-app . \
+       --set image.repository=yourImageRepository \
+       --set image.tag=${{ github.sha }} \
+       --namespace default
+
+  rollback:
+    runs-on: ubuntu-latest
+    if: failure()
+    steps:
+      - name: Rollback on Failure
+        run: |
+          helm rollback postgres -n vikunja
+
+      - name: Run Database Migration
+        run: |
+          helm upgrade --install db-migrate ./postgresql-chart --namespace vikunja
+
+      - name: Deploy API Service
+        run: |
+          helm upgrade --install api ./api-chart --namespace vikunja
