@@ -26,7 +26,7 @@ metadata:
   region: eu-central-1
 nodeGroups:
   - name: ng-1
-    instanceType: t3.small
+    instanceType: t3.medium
     desiredCapacity: 1
 fargateProfiles:
   - name: fp-default
