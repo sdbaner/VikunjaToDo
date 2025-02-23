@@ -1,6 +1,9 @@
 # Network Considerations
 I have used AWS with EKS with managed worker nodes.
 
+![AWSsetup](https://github.com/user-attachments/assets/52e2266a-58d6-497f-977e-6900b01ff659)
+
+
 ## VPC with public and private endpoints
 An EKS cluster consists of 2 VPCs. The first VPC is managed by AWS where the Kubernetes Control Plane resides within this VPC (this cannot be seen by the users). The second VPC is the customer VPC which we specify during the cluster creation. This is where we place all the worker nodes.
 
