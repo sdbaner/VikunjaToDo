@@ -10,65 +10,13 @@ Since the latest version has only two components, I am considering an older vers
 ## Design Approach
 I am using AWS and deploying the application on EKS. I have using VPC with subnet and using fargate instead of ec2 instanc eto deploy the application to save some cost.  
 
-```
-eksctl create cluster --name myDemoEKS \
---region eu-central-1 \
---fargate
-```
-
-Create fargate cluster config
-```
-apiVersion: eksctl.io/v1alpha5
-kind: ClusterConfig
-
-metadata:
-  name: fargate-cluster
-  region: eu-central-1
-nodeGroups:
-  - name: ng-1
-    instanceType: t3.medium
-    desiredCapacity: 1
-fargateProfiles:
-  - name: fp-default
-    selectors:
-      - namespace: default
-      - namespace: kube-system
-  - name: fp-dev
-    selectors:
-      # All workloads in the "dev" Kubernetes namespace matching the following
-      # label selectors will be scheduled onto Fargate:
-      - namespace: vikunja
-        labels:
-          env: dev
-```
-
-Create fargate profile
-```
-eksctl create cluster -f myFargateCluster.yaml
-```
-
-associate an oidc provider in the cluster
-```
-eksctl utils associate-iam-oidc-provider --region eu-central-1 --cluster myDemoEKS --approve
-```
-
-Delete cluster
-```
-eksctl delete cluster --name myDemoEKS --region eu-central-1
-```
-### Why Choose EKS with Fargate?
-Amazon EKS simplifies the management of Kubernetes clusters, while Fargate abstracts the underlying infrastructure, allowing you to focus on deploying applications without worrying about the servers. Key benefits include:
-
-Scalability: Automatically scales compute resources based on your application’s needs.
-Security: Isolates each pod, enhancing security and reducing attack surfaces.
-Cost Efficiency: Pay only for the resources your applications use, avoiding the need for over-provisioning.
 
 
 ## Documentation
 
-- [Network considerations](README-NetworkConsiderations.md)
+- [Network considerations](NetworkConsiderations.md)
 - [Security Considerations](README-SecurityConsiderations.md)
-- [Database Deployment](README-DatabaseDeployment.md)
+- [Database Migration](DatabaseMigration.md)
 - [CI CD](README-CiCd.md)
 - [Keycloak](README-Keycloak.md)
 - [Observabilty](README-Observabilty.md)

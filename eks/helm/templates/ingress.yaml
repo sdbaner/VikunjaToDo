@@ -1,27 +1,26 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ .Release.Name }}-ingress
   annotations:
-    alb.ingress.kubernetes.io/group.name: vikunja-ingress
     alb.ingress.kubernetes.io/healthcheck-path: /api/v1/info
     alb.ingress.kubernetes.io/scheme: internet-facing
     kubernetes.io/ingress.class: alb
-  name: {{ .Release.Name }}-ingress
-  namespace: {{ .Release.Namespace }}
 spec:
   rules:
   - http:
       paths:
       - backend:
           service:
-            name: {{ .Release.Namespace }}-frontend
+            name: {{ .Release.Name }}-frontend
             port:
               number: 80
         path: /
         pathType: Prefix
       - backend:
           service:
-            name: {{ .Release.Namespace }}-api
+            name: {{ .Release.Name }}-api
             port:
               number: 3456
         path: /api/v1

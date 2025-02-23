@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app.kubernetes.io/name: api
-    release: {{ .Release.Name }}
   name: {{ .Release.Name }}-api
   namespace: {{ .Release.Namespace }}
+  labels:
+    service: api
+    release: {{ .Release.Name }}
 spec:
-  {{- if .Values.replicas }}
+  {{- if .Values.api.replicas }}
   replicas: {{ .Values.replicas }}
   {{- else }}
   replicas: 1
   {{- end }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: api
+      service: api
       release: {{ .Release.Name }}
   strategy:
     rollingUpdate:
@@ -24,12 +24,12 @@ spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: api
+        service: api
         release: {{ .Release.Name }}
     spec:
       containers:
       - name: {{ .Release.Name }}-api
-        image: "{{ .Values.image.repository }}/api:{{ .Values.image.tag }}"
+        image: "{{ .Values.image.repository }}/api:{{ .Values.api.imagetag }}"
         ports:
         - containerPort: 3456
           name: http
@@ -48,6 +48,13 @@ spec:
             secretKeyRef:
               name: {{ .Release.Name }}-postgresql
               key: postgres-password
+        resources:
+          limits:
+            cpu: 200m
+            memory: 100Mi
+          requests:
+            cpu: 100m
+            memory: 50Mi
         livenessProbe:
           failureThreshold: 3
           httpGet:
@@ -67,16 +74,16 @@ spec:
           successThreshold: 1
           timeoutSeconds: 1
         volumeMounts:
-        - mountPath: /etc/vikunja/config.yml
-          name: config
+        - name: config     
+          mountPath: /etc/vikunja/config.yml
           subPath: config.yml
-        - mountPath: /data
-          name: data
+        - name: data
+          mountPath: /data          
       volumes:
-      - configMap:
+      - name: config
+        configMap:
           defaultMode: 420
-          name: {{ .Release.Name }}-api-config
-        name: config
+          name: {{ .Release.Name }}-api-config      
       - name: data
         persistentVolumeClaim:
           claimName: {{ .Release.Name }}-api-data

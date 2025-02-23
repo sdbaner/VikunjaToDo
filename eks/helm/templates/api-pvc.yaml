@@ -1,0 +1,17 @@
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+ name: {{ .Release.Name }}-api-data
+ namespace: {{ .Values.namespace }}
+ labels:
+   service: api
+   release: {{ .Release.Name }}
+spec:
+ storageClassName: {{ .Values.api.persistence.storageClass }}
+ accessModes:
+   - ReadWriteOnce
+ resources:
+   requests:
+     storage: {{ .Values.api.persistence.size | quote }}
+ {{- end }}
