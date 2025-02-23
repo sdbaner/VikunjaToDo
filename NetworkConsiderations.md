@@ -71,8 +71,9 @@ eksctl create iamserviceaccount \
 ### Install AWS Load Balancer Controller
 ```
 helm repo add eks https://aws.github.io/eks-charts
+
 helm repo update eks
-```
+
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \            
   -n kube-system \
   --set clusterName=<your-cluster-name> \
@@ -101,7 +102,6 @@ eksctl create iamserviceaccount \
     --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy \
     --approve
 ```
-
 ```
 eksctl create addon --name aws-ebs-csi-driver --cluster <YOUR-CLUSTER-NAME> --service-account-role-arn arn:aws:iam::<AWS-ACCOUNT-ID>:role/AmazonEKS_EBS_CSI_DriverRole --force
 ```
