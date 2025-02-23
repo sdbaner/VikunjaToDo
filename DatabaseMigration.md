@@ -48,10 +48,10 @@ spec:
 
 ![Helmhook](https://github.com/user-attachments/assets/9b77f232-39bf-45f1-85fb-00d484305d9a)
 
- Advantages:
+ Advantages/ Disadvantages:
 - Doesnt need extra resources.
 - Modularity and reusabilty.
-Disadvantages:
+
 - Rollback is not straight forward.
 - Needs some downtime.
 
@@ -61,10 +61,10 @@ Once the inactive system is upgraded and tested, users are switched over.
 
 ![BluegreenDeployment](https://github.com/user-attachments/assets/27075c51-e61a-4a8f-ac28-facc1b0cad2a)
 
- Advantages:
+ Advantages/ Disadvantages:
 - Rollback is easy. The only catch with this setup is that transactions executed by the users on the green side must be replayed on blue after the rollback.
 - Zero downtime
-Disadvantages:
+
 - Uses double the resources.
 - Traffic switch has to be managed efficiently.
   
