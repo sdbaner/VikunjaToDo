@@ -24,10 +24,6 @@ I am using AWS and deploying the application on EKS. I have using VPC with subne
 
 
 
-Network Design
-
-Deploy Amazon EKS cluster with Fargate-Linux nodes through eksctl
-
 
 ## TODO
 
