@@ -51,7 +51,6 @@ spec:
  Advantages/ Disadvantages:
 - Doesnt need extra resources.
 - Modularity and reusabilty.
-
 - Rollback is not straight forward.
 - Needs some downtime.
 
@@ -64,7 +63,6 @@ Once the inactive system is upgraded and tested, users are switched over.
  Advantages/ Disadvantages:
 - Rollback is easy. The only catch with this setup is that transactions executed by the users on the green side must be replayed on blue after the rollback.
 - Zero downtime
-
 - Uses double the resources.
 - Traffic switch has to be managed efficiently.
   
