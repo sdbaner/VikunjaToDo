@@ -8,20 +8,29 @@ You have been given the Vikunja ToDo List application, a microservices-based app
 Since the latest version has only two components, I am considering an older version 0.21.0 with three components i.e. frontend, api and database.
 
 ## Design Approach
-I am using AWS and deploying the application on EKS with managed worker nodes. I have used eksctl to quickly deploy the cluster with a vpc with a public and private subnets. The eks cluster is within the private subnet that is isolated from the internet. More: [Network considerations](NetworkConsiderations.md)
+I am using AWS and deploying the application on EKS with managed worker nodes. I have used eksctl to quickly deploy the cluster with a vpc with a public and private subnets. More: [Network considerations](NetworkConsiderations.md)
 
-The app uses three components 
+Vikunja App has three main components i.e. frontend, api and database in the same namespace vikunja. Both the frontend and the api components are exposed on the internet. 
+I am going with statefulset database. 
 
-## Documentation
+** Advantages with self managed database in kubernetes :**
+- low operational cost
+- full control
+- no network latency as data resides within the cluster
+
+  ![Screen Shot 2025-02-26 at 11 30 36 AM](https://github.com/user-attachments/assets/d69b7868-6bb9-469a-b737-ca31ff19f1f9)
+
+### Flow of request
+1. User access the vikunja app at https://www.myvinkunja.app
+2. Ideally the domain name "vikunja.app" should be hosted in Cloudflare/Route53. The Route53 then resolves the domain name to the public IP of AWS ALB. Note: This step has not been implemented. This also requires setting up ssl certificates.
+3. The AWS ALB then forwards the traffic to the nginx ingress controller in the EKS Cluster.
+4. The controller then routes the request to the services frontend and api. 
 
 
-- [Security Considerations](README-SecurityConsiderations.md)
-- [Database Migration](DatabaseMigration.md)
-- [CI CD](README-CiCd.md)
-- [Keycloak](README-Keycloak.md)
-- [Observabilty](README-Observabilty.md)
-- [Secrets Mannagement](README-Secrets.md)
-- [Cost optimisation.md]
+## Further Documentations
+
+
+
 
 
 
@@ -29,16 +38,9 @@ The app uses three components
 ## TODO
 
 1. Create infrastructure using terraform.
-
-Adding GitHub Actions steps to build and push Docker images to DockerHub
-Creating a Helm chart for the Kubernetes deployment
-Exploring the Helm chart structure and values.yaml configuration
-Automating docker image tag update to be picked up by ArgoCD
-Setting up ArgoCD for GitOps: Deploying ArgoCD with Helm using Terraform
-Accessing ArgoCD dashboard and logging in with default credentials
-Writing the ArgoCD application YAML (argocd-app.yaml) to link the Helm chart
-Configuring ArgoCD to monitor GitHub repository using a Personal Access Token (PAT)
-Deploying the ArgoCD application and enabling auto-sync
-Testing the pipeline with a Python app update
-Accessing the updated Python app using port forwarding
-Best practices for CI/CD and GitOps pipelines in production environments
+2. Cost optimization
+3. Try ArgoCD
+4. How to secure api
+5. Serets managment
+6. Keykloak
+7. observabilty
