@@ -47,3 +47,4 @@ Note: This step has not been implemented.
 2. Improvements - rbac, node affinity, network policy for postgres
 3. Secure api endpoint with authorized requests
 4. Secrets management
+5. Try ArgoCD
