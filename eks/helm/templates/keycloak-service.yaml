@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-keycloak
+  namespace: {{ .Values.namespace }}
+  labels:
+    service: keycloak
+    release: {{ .Release.Name }}
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  selector:
+    service: keycloak
+    release: {{ .Release.Name }}
+  type: NodePort

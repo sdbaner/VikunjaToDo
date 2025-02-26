@@ -14,7 +14,7 @@ spec:
     protocol: TCP
     targetPort: tcp-postgresql
   selector:
-    omponent: primary
+    component: primary
     release: {{ .Release.Name }}
     service: postgresql
   type: ClusterIP

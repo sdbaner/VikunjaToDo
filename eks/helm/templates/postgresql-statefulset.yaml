@@ -14,8 +14,7 @@ spec:
       release: {{ .Release.Name }}
       service: postgresql  
       component: primary
-      component: primary
-  serviceName: {{ .Release.Name }}-postgresql-hl
+  serviceName: {{ .Release.Name }}-postgresql
   template:
     metadata:
       name: {{ .Release.Name }}-postgresql
@@ -67,7 +66,6 @@ spec:
             - /bin/sh
             - -c
             - exec pg_isready -U "vikunja" -d "dbname=vikunja" -h 127.0.0.1 -p 5432
-          failureThreshold: 6
           initialDelaySeconds: 30
           periodSeconds: 10
           successThreshold: 1
@@ -93,21 +91,18 @@ spec:
             - |
               exec pg_isready -U "vikunja" -d "dbname=vikunja" -h 127.0.0.1 -p 5432
               [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
-          failureThreshold: 6
           initialDelaySeconds: 5
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 5
         volumeMounts:
-        - mountPath: /dev/shm
-          name: dshm
         - mountPath: /bitnami/postgresql
           name: data
       restartPolicy: Always
       volumes:
-      - emptyDir:
-          medium: Memory
-        name: dshm
+      - name: data
+        persistentVolumeClaim:
+          claimName: data
   volumeClaimTemplates:
   - apiVersion: v1
     kind: PersistentVolumeClaim

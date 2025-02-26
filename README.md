@@ -13,7 +13,7 @@ I am using AWS and deploying the application on EKS with managed worker nodes. I
 Vikunja App has three main components i.e. frontend, api and database in the same namespace vikunja. Both the frontend and the api components are exposed on the internet. 
 I am going with statefulset database. 
 
-** Advantages with self managed database in kubernetes :**
+Advantages with self managed database in kubernetes :
 - low operational cost
 - full control
 - no network latency as data resides within the cluster
@@ -23,7 +23,7 @@ I am going with statefulset database.
 
 ### Flow of request
 1. User access the vikunja app at https://www.myvinkunja.app
-2. Ideally the domain name "vikunja.app" should be hosted in Cloudflare/Route53. The Route53 then resolves the domain name to the public IP of AWS ALB.SSL en sures secure https communication between users and ALB.
+2. Ideally the domain name "myvikunja.app" should be hosted in Cloudflare/Route53. The Route53 then resolves the domain name to the public IP of AWS ALB.SSL en sures secure https communication between users and ALB.
 Note: This step has not been implemented.
 3. The AWS ALB then forwards the request to ALB Ingress Controller.
 4. It forwards the traffic to nginx ingress controller hosted in EKS
@@ -34,7 +34,11 @@ Note: This step has not been implemented.
 
 
 ## Further Documentations
-
+[Network considerations](NetworkConsiderations.md)
+[Database Migration](DatabaseMigration.md)
+[Observabilty](Observabilty.md)
+[CI CD](CICD.md)
+[Keycloak](Keycloak.md)
 
 
 
@@ -44,11 +48,7 @@ Note: This step has not been implemented.
 ## TODO
 
 1. Create infrastructure using terraform.
-2. Cost optimization
-3. Try ArgoCD
-4. How to secure api
-5. Serets managment
-6. Keykloak
-7. observabilty
-8. implement RBAC
-9. 
+2. Improvements - rbac, node affinity, network policy for postgres
+3. Secure api endpoint with authorized requests
+4. Secrets management
+

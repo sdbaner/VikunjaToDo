@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: {{ .Values.namespace }}
+  labels:
+    service: keycloak
+    release: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: keycloak
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        service: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: quay.io/keycloak/keycloak:20.0.3
+        args: ["start-dev"]
+        env:
+        - name: KEYCLOAK_ADMIN
+          value: "admin"
+        - name: KEYCLOAK_ADMIN_PASSWORD
+          value: "<input_keycloak_password>"
+        - name: DB_VENDOR
+          value: postgres
+        - name: DB_ADDR
+          value: "<input_db_address>"
+        - name: DB_USERNAME
+          value: "auroraserverless"
+        - name: DB_PASSWORD
+          value: "<input_db_password>"
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_DATABASE
+          value: "keycloakdemo"
+        - name: KC_PROXY
+          value: "edge"
+        ports:
+        - name: http
+          containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /realms/master
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 3

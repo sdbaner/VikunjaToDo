@@ -25,3 +25,10 @@ spec:
               number: 3456
         path: /api/v1
         pathType: Prefix
+      - backend:
+          service:
+            name: {{ .Release.Name }}-keycloak
+            port:
+              number: 8080
+        path: /keycloak
+        pathType: Prefix
