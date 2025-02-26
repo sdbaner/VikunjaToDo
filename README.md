@@ -34,11 +34,11 @@ Note: This step has not been implemented.
 
 
 ## Further Documentations
-[Network considerations](NetworkConsiderations.md)
-[Database Migration](DatabaseMigration.md)
-[Observabilty](Observabilty.md)
-[CI CD](CICD.md)
-[Keycloak](Keycloak.md)
+- [Network considerations](NetworkConsiderations.md)
+- [Database Migration](DatabaseMigration.md)
+- [Observabilty](Observabilty.md)
+- [CI CD](CICD.md)
+- [Keycloak](Keycloak.md)
 
 
 ## TODO
