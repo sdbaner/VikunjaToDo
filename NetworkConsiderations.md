@@ -1,21 +1,24 @@
 # Network Considerations
-I have used AWS with EKS with managed worker nodes.
-
+My application in hosted on EKS with managed worker nodes. 
 ![AWSsetup](https://github.com/user-attachments/assets/52e2266a-58d6-497f-977e-6900b01ff659)
 
 
+## VPC with public and private subnets
+This is the widely used VPC setup for EKS, where the EKS cluster (worker nodes and control plane) reside within the private subnet with no direct access from the internet. The public subnet consists of Internet gateway to allow internet access , Application Load Balancer to host external facing services and NAT Gateway to enable outbound internet traffic from private subnet.
+
+NOTE: The control plane is completely managed by AWS and can not be seen by users.
+
 ## VPC with public and private endpoints
-An EKS cluster consists of 2 VPCs. The first VPC is managed by AWS where the Kubernetes Control Plane resides within this VPC (this cannot be seen by the users). The second VPC is the customer VPC which we specify during the cluster creation. This is where we place all the worker nodes.
+The first VPC is managed by AWS where the Kubernetes Control Plane resides within this VPC (this cannot be seen by the users). The second VPC is the customer VPC which we specify during the cluster creation. This is where we place all the worker nodes.
 
 ### Cluster Endpoint Access Type
 This option allows the public endpoint as explained above, but the Customer Managed VPC traffic (eg: worker nodes trying to connect to the EKS control plane) will go through the EKS-managed Elastic Network Interface (ENI) through a private endpoint.
 This situation is ideal if you’d like to allow your cluster to be accessible via the internet, but you’d like to allow your worker nodes to be in a private subnet and communicate with the EKS control plane through a private endpoint.
 
-### Public and Private Subnets
-This is the widely used VPC setup for EKS, where the worker nodes reside within the private subnets and the NAT Gateway and load balancers are placed within the public subnet.
+
 
 ### NAT Gateway
-You can use a network address translation (NAT) gateway to enable instances in a private subnet to connect to the internet or other AWS services, but prevent the internet from initiating a connection with those instances.In order to access internet to your private subnet, NAT Gateway must be added to Public Subnet only.
+You can use a network address translation (NAT) gateway to enable instances in a private subnet to connect to the internet or other AWS services, but prevent the internet from initiating a connection with those instances. In order to access internet to your private subnet, NAT Gateway must be added to Public Subnet only. For example, NAT gateway enables outbound internet traffic to pull docker image etc.
 
 ### Route table 
 It contains a set of rules, called routes, that are used to determine where network traffic from your subnet or gateway is directed. To put it simply, a route table tells network packets which way they need to go to get to their destination.
@@ -31,14 +34,14 @@ Once the project is complete, delete the cluster
 eksctl delete cluster --name mycluster --region eu-central-1
 ```
 
-## Configure IAM OIDC Provider
+### Configure IAM OIDC Provider
 ```
 export cluster_name=mycluster
 oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | cut -d '/' -f 5) 
 eksctl utils associate-iam-oidc-provider --cluster $cluster_name --approve
 ```
 
-## Deploy ALB controller
+### Deploy ALB controller
 Selecting the Application Load Balancer (ALB) as the workload is HTTP/HTTPS.The ALB is deployed in the public subnets and is accessible from the internet.The ALB routes traffic to the private web servers in the private subnets.The private web servers are not directly accessible from the internet, but the ALB acts as a secure gateway.
 By default the AWS Load Balancer controller will register targets using "Instance" type and this target will be the Worker Node’s IP and NodePort, implying traffic from the Load Balancer will be forwarded to the Worker Node on the NodePort.
 
