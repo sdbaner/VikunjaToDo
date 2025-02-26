@@ -1,27 +1,29 @@
 # Network Considerations
 My application in hosted on EKS with managed worker nodes. 
+
 ![AWSsetup](https://github.com/user-attachments/assets/52e2266a-58d6-497f-977e-6900b01ff659)
 
 
 ## VPC with public and private subnets
-This is the widely used VPC setup for EKS, where the EKS cluster (worker nodes and control plane) reside within the private subnet with no direct access from the internet. The public subnet consists of Internet gateway to allow internet access , Application Load Balancer to host external facing services and NAT Gateway to enable outbound internet traffic from private subnet.
-
-NOTE: The control plane is completely managed by AWS and can not be seen by users.
-
-## VPC with public and private endpoints
-The first VPC is managed by AWS where the Kubernetes Control Plane resides within this VPC (this cannot be seen by the users). The second VPC is the customer VPC which we specify during the cluster creation. This is where we place all the worker nodes.
+This is the widely used VPC setup for EKS, where the EKS cluster (worker nodes) reside within the private subnet with no direct access from the internet. The public subnet consists of Internet gateway to allow internet access , Application Load Balancer to host external facing services and NAT Gateway to enable outbound internet traffic from private subnet.
+NOTE: The control plane is completely managed by AWS and hosted in a private VPC that can not be seen by users.
 
 ### Cluster Endpoint Access Type
 This option allows the public endpoint as explained above, but the Customer Managed VPC traffic (eg: worker nodes trying to connect to the EKS control plane) will go through the EKS-managed Elastic Network Interface (ENI) through a private endpoint.
 This situation is ideal if you’d like to allow your cluster to be accessible via the internet, but you’d like to allow your worker nodes to be in a private subnet and communicate with the EKS control plane through a private endpoint.
-
-
 
 ### NAT Gateway
 You can use a network address translation (NAT) gateway to enable instances in a private subnet to connect to the internet or other AWS services, but prevent the internet from initiating a connection with those instances. In order to access internet to your private subnet, NAT Gateway must be added to Public Subnet only. For example, NAT gateway enables outbound internet traffic to pull docker image etc.
 
 ### Route table 
 It contains a set of rules, called routes, that are used to determine where network traffic from your subnet or gateway is directed. To put it simply, a route table tells network packets which way they need to go to get to their destination.
+- allows ingress controller in private subnet to recieve traffic from ALB in public subnet
+- ensures that worker nodes can reach EKS API endpoint via a private link.
+- ensures pod in private subnet can communicate with external services.
+
+### Elastic Network Interface (ENI)
+This is the network interfaces for EKS nodes, ALB, and pods (via VPC CNI).
+
 
 
 ## Deploying EKS with eksctl
