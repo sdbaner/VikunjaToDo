@@ -50,3 +50,5 @@ Note: This step has not been implemented.
 5. Serets managment
 6. Keykloak
 7. observabilty
+8. implement RBAC
+9. 
