@@ -37,7 +37,6 @@ Note: This step has not been implemented.
 - [Network considerations](NetworkConsiderations.md)
 - [Database Migration](DatabaseMigration.md)
 - [Observabilty](Observabilty.md)
-- [CI CD](CICD.md)
 - [Keycloak](Keycloak.md)
 
 
