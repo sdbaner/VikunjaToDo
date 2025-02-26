@@ -8,13 +8,13 @@ You have been given the Vikunja ToDo List application, a microservices-based app
 Since the latest version has only two components, I am considering an older version 0.21.0 with three components i.e. frontend, api and database.
 
 ## Design Approach
-I am using AWS and deploying the application on EKS. I have using VPC with subnet and using fargate instead of ec2 instanc eto deploy the application to save some cost.  
+I am using AWS and deploying the application on EKS. I have used eksctl to quickly deploy the cluster with a vpc with a public and private subnets. The eks cluster is within the private subnet that is isolated from the internet. More: Network considerations](NetworkConsiderations.md)
 
-
+The app uses three components 
 
 ## Documentation
 
-- [Network considerations](NetworkConsiderations.md)
+
 - [Security Considerations](README-SecurityConsiderations.md)
 - [Database Migration](DatabaseMigration.md)
 - [CI CD](README-CiCd.md)
