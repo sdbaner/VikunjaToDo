@@ -20,11 +20,17 @@ I am going with statefulset database.
 
   ![Screen Shot 2025-02-26 at 11 30 36 AM](https://github.com/user-attachments/assets/d69b7868-6bb9-469a-b737-ca31ff19f1f9)
 
+
 ### Flow of request
 1. User access the vikunja app at https://www.myvinkunja.app
-2. Ideally the domain name "vikunja.app" should be hosted in Cloudflare/Route53. The Route53 then resolves the domain name to the public IP of AWS ALB. Note: This step has not been implemented. This also requires setting up ssl certificates.
-3. The AWS ALB then forwards the traffic to the nginx ingress controller in the EKS Cluster.
-4. The controller then routes the request to the services frontend and api. 
+2. Ideally the domain name "vikunja.app" should be hosted in Cloudflare/Route53. The Route53 then resolves the domain name to the public IP of AWS ALB.SSL en sures secure https communication between users and ALB.
+Note: This step has not been implemented.
+3. The AWS ALB then forwards the request to ALB Ingress Controller.
+4. It forwards the traffic to nginx ingress controller hosted in EKS
+5. Based on path, it directs the traffic to the services frontend or api. 
+6. The frontend/api service processes the request and sends a response to the nginx ingress controller.
+7. It forwards the response to ALB.
+8. ALB then sends it back to user over https.
 
 
 ## Further Documentations
