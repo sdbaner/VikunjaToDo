@@ -48,7 +48,7 @@ Note: This step has not been implemented.
 3. Try ArgoCD
 4. How to secure api
 5. Serets managment
-6. Keykloak
+6. Use Keykloak as authorization service to connect to api
 7. observabilty
 8. implement RBAC
 9. 
