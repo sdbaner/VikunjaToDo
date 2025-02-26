@@ -34,21 +34,16 @@ Note: This step has not been implemented.
 
 
 ## Further Documentations
-
-
-
-
-
+[Network considerations](NetworkConsiderations.md)
+[Database Migration](DatabaseMigration.md)
+[Observabilty](Observabilty.md)
+[CI CD](CICD.md)
+[Keycloak](Keycloak.md)
 
 
 ## TODO
 
 1. Create infrastructure using terraform.
-2. Cost optimization
-3. Try ArgoCD
-4. How to secure api
-5. Serets managment
-6. Use Keykloak as authorization service to connect to api
-7. observabilty
-8. implement RBAC
-9. 
+2. Improvements - rbac, node affinity, network policy for postgres
+3. Secure api endpoint with authorized requests
+4. Secrets management
