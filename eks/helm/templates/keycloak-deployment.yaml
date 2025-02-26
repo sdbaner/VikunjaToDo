@@ -23,23 +23,22 @@ spec:
         args: ["start-dev"]
         env:
         - name: KEYCLOAK_ADMIN
-          value: "admin"
+          value: "{{ .Values.env.VIKUNJA_KEYCLOAK_ADMIN }}"
         - name: KEYCLOAK_ADMIN_PASSWORD
-          value: "<input_keycloak_password>"
-        - name: DB_VENDOR
-          value: postgres
+          value: "{{ .Values.env.VIKUNJA_KEYCLOAK_PASS }}"
         - name: DB_ADDR
-          value: "<input_db_address>"
+          value: "{{ .Values.env.VIKUNJA_DATABASE_HOST }}"
         - name: DB_USERNAME
-          value: "auroraserverless"
+          value: "{{ .Values.env.VIKUNJA_DATABASE_USER }}"
         - name: DB_PASSWORD
-          value: "<input_db_password>"
+          valueFrom: 
+            secretKeyRef:
+              name: {{ .Release.Name }}-postgresql
+              key: postgres-password
         - name: DB_PORT
           value: "3306"
         - name: DB_DATABASE
           value: "keycloakdemo"
-        - name: KC_PROXY
-          value: "edge"
         ports:
         - name: http
           containerPort: 8080

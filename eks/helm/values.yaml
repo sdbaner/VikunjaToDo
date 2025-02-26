@@ -29,7 +29,9 @@ redis:
 env:
   VIKUNJA_DATABASE_HOST: "vikunja-postgresql"
   VIKUNJA_DATABASE_USER: "vikunja"
-  VIKUNJA_DATABASE_PASSWORD: "supersecurepassword"
+  VIKUNJA_DATABASE_PASSWORD: "supersecret"
   VIKUNJA_DATABASE_NAME: "vikunja"
   VIKUNJA_API_URL: "http://k8s-vikunjaingress-ec2cf7e6aa-693616818.eu-central-1.elb.amazonaws.com/api/v1"
+  VIKUNJA_KEYCLOAK_USER: "admin"
+  VIKUNJA_KEYCLOAK_PASS: "supersecretagain"
 

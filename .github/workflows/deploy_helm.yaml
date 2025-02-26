@@ -1,16 +1,23 @@
-name: Deploy Helm Chart
+name: Deploy Vikunja Helm Chart
 
 on:
   push:
     branches:
       - main  # Trigger on main branch commits
 
+env:
+  ECR_REPOSITORY: vikunja-app
+  EKS_CLUSTER_NAME: mycluster 
+  AWS_REGION: eu-central-1 
+
+  
   deploy-vikunja:
     name: Deploy Helm chart
     runs-on: ubuntu-latest
-    steps:
+  
+     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Configure AWS Credentials  
         uses: aws-actions/configure-aws-credentials@v1
@@ -19,14 +26,17 @@ on:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-     - name: Update KubeConfig 
-       run: |   
-         aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region=${{ env.AWS_REGION }}
+      - name: Login to docker/ecr
+
+
+      - name: Update KubeConfig 
+        run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
      
       - name: Deploy Helm Chart To Amazon EKS Cluster
-        env:
-           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-           IMAGE_TAG: ${{ steps.commit.outputs.short }}
         run: |
-          helm install ${{ env.HELM_CHART_NAME }} eks/helm/ --set containers.image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          helm install --name vikunja 
+            --namespace vikunja eks/helm/
+            --set VIKUNJA_DATABASE_PASSWORD=${{ secrets.SECRET_PGSQL }}
+            --set VIKUNJA_KEYCLOAK_PASS=${{ secrets.SECRET_KCLK }}
+            --values values.yaml
   
