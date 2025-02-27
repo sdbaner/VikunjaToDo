@@ -44,6 +44,10 @@ Note: This step has not been implemented.
 
 1. Create infrastructure using terraform.
 2. Improvements - rbac, node affinity, network policy for postgres
-3. Secure api endpoint with authorized requests
-4. Secrets management
-5. Try ArgoCD
+3. Use redis for caching API respones, 
+4. Tighten security around api endpoint with authorized requests
+5. Implement postgresql with HA - fault tolerant
+6. Scripts to automate database backup   
+7. Secrets management
+8. For autoscaling - implement keda based on redis queue length or tasks queue
+9. Try ArgoCD
